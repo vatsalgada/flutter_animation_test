@@ -26,18 +26,36 @@ class HomeState extends State<Home> with TickerProviderStateMixin {
     );
   }
 
+  onTap() {
+    if (catController.status == AnimationStatus.completed) {
+      catController.reverse();
+    } else if (catController.status == AnimationStatus.dismissed) {
+      catController.forward();
+    }
+  }
+
   @override
   Widget build(context) {
     //returning something(widget) so that the null is not hit for the parent
     return Scaffold(
-      appBar: AppBar(
-        title: Text("animation!"),
-      ),
-      body: buildAnimation(),
-    );
+        appBar: AppBar(
+          title: Text("animation!"),
+        ),
+        body: GestureDetector(
+          child: buildAnimation(),
+          onTap: onTap,
+        ));
   }
 
   Widget buildAnimation() {
-    return Cat();
+    return AnimatedBuilder(
+        animation: catAnimation,
+        builder: (context, child) {
+          return Container(
+            child: child,
+            margin: EdgeInsets.only(top: catAnimation.value),
+          );
+        },
+        child: Cat());
   }
 }
